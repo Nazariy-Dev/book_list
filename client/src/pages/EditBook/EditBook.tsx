@@ -51,9 +51,13 @@ function EditBook() {
             setErrorMessageVisible(true);
         }
 
-        setTimeout(() => {
+        const timerId= setTimeout(() => {
             redirect("/")
         }, 3000);
+
+        return ()=> {
+            clearTimeout(timerId)
+        }
     }
 
 
