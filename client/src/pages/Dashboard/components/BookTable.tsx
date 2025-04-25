@@ -12,23 +12,35 @@ function BookTable({books, filter}: {
 }) {
 
     const {fetchBooks: refetchBooks, booksLoading, showingItems} = useContext(AppContex)
-    const [successMsgVisible, setSuccessMsgVisible] = useState(false);
+    const [deleteBookMsgVisible, setDeleteBookMsgVisible] = useState(false);
+    const [deleteBookError, setDeleteBookError] = useState("");
+    const [activationError, setActivationError] = useState("")
+
     const [showModal, setShowModal] = useState(false)
     const [bookTitle, setBookTitle] = useState("");
     const [bookId, setBookId] = useState("");
 
     const onDeleteBook = async (id: string) => {
-        await client.removeBook(id)
-        refetchBooks(filter)
-        setShowModal(false)
-        setSuccessMsgVisible(true)
-        setTimeout(() => setSuccessMsgVisible(false), 3000)
+        try {
+            await client.removeBook(id)
+            refetchBooks(filter)
+            setShowModal(false)
+            setDeleteBookMsgVisible(true)
+            setTimeout(() => setDeleteBookMsgVisible(false), 3000)
+        } catch (e) {
+            setDeleteBookError(deleteBookError)
+        }
+
     }
 
-
     const onChangeActivation = async (id: string, data: { deactivated: boolean }) => {
-        await client.changeActivation(id, data)
-        refetchBooks(filter)
+        try {
+            await client.changeActivation(id, data)
+            refetchBooks(filter)
+        } catch (e: any) {
+            setActivationError(e.message)
+        }
+
     }
 
     return (
@@ -63,7 +75,9 @@ function BookTable({books, filter}: {
                                 ))}
                             </tbody>
                         </table>
-                        {successMsgVisible && <Alert message={`Book ${bookTitle} has been deleted`} type={"success"}/>}
+                        {deleteBookMsgVisible && <Alert message={`Book ${bookTitle} has been deleted`} type={"success"}/>}
+                        {deleteBookError && <Alert message={deleteBookError} type={"error"}/>}
+                        {activationError && <Alert message={activationError} type={"error"}/>}
                         {showModal &&
                             <Modal onCancel={() => setShowModal(false)} onConfirm={() => onDeleteBook(bookId)}/>}
                     </div>

@@ -50,9 +50,9 @@ function Dashboard() {
             setBooks(data);
             setTotalItems(totalItems)
             setBooksLoading(false)
-        } catch {
+        } catch (e: any) {
             setBooksLoading(false)
-            setError("Something went wrong")
+            setError(e.message)
         }
     }
 

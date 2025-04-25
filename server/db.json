@@ -1,14 +1,14 @@
 {
   "books": [
     {
-      "id": "3548",
       "title": "Harry Potter",
-      "author": "J.K. Rowling's",
+      "author": "J.K. Rowling'ss",
       "ISBN": 9783161484100,
       "category": "Fiction",
       "createdAt": "2025-03-05T13:52:28Z",
-      "modifiedAt": "",
-      "deactivated": false
+      "modifiedAt": "2025-04-25T09:23:13Z",
+      "deactivated": false,
+      "id": "3548"
     },
     {
       "title": "Atomic Habits",
@@ -29,6 +29,16 @@
       "createdAt": "2025-03-05T13:54:25Z",
       "modifiedAt": "",
       "deactivated": true
+    },
+    {
+      "id": "29ab",
+      "title": "New book",
+      "author": "author",
+      "ISBN": 335234,
+      "category": "Science",
+      "createdAt": "2025-04-25T09:02:22Z",
+      "modifiedAt": "",
+      "deactivated": false
     }
   ]
 }

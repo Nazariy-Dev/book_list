@@ -13,7 +13,7 @@ function AddBook() {
     }, []);
 
     const [successMsgVisible, setSuccessMsgVisible] = useState(false);
-    const [errorMessageVisible, setErrorMessageVisible] = useState(false);
+    const [addBookError, setAddBookError] = useState("");
 
     const handleSubmit = async (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
         e.preventDefault();
@@ -33,11 +33,13 @@ function AddBook() {
             deactivated: false
         }
 
-        const response = await client.addBook(data);
-        if (response.ok) {
+        try {
+             await client.addBook(data);
             setSuccessMsgVisible(true);
-        } else {
-            setErrorMessageVisible(true);
+
+        } catch (e: any) {
+            setAddBookError(e.message);
+
         }
 
         setTimeout(() => {
@@ -81,7 +83,7 @@ function AddBook() {
 
                     <button className={"btn btn-primary btn-md mt-2"} type="submit">Add a Book</button>
                     {successMsgVisible && <Alert message={"Book has been added"} type={"success"}/>}
-                    {errorMessageVisible && <Alert message={"Something went wrong"} type={"error"}/>}
+                    {addBookError && <Alert message={addBookError} type={"error"}/>}
                 </div>
             </form>
         </ActionForm>

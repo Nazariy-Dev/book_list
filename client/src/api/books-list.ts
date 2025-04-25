@@ -7,9 +7,9 @@ async function get<TBody>(relativeUrl: string): Promise<TBody> {
     let requestOptions = {
         method: "GET",
     };
-    const response = await fetch(`${apiBasePath}${relativeUrl}`, requestOptions);
-    const value: TBody = await response.json();
-    return value;
+        const response = await fetch(`${apiBasePath}${relativeUrl}`, requestOptions);
+        const data = await response.json();
+        return data;
 }
 
 async function post<T>(relativeUrl: string, data: T): Promise<Response> {
@@ -39,8 +39,7 @@ async function put(relativeUrl: string, data: AddBookRequest, id: string): Promi
         },
         body: JSON.stringify(data)
     };
-    const response = await fetch(`${apiBasePath}${relativeUrl}/${id}`, requestOptions);
-    return response;
+    return await fetch(`${apiBasePath}${relativeUrl}/${id}`, requestOptions);
 }
 
 async function patch(relativeUrl: string, id: string, data: any): Promise<Response> {
@@ -51,16 +50,14 @@ async function patch(relativeUrl: string, id: string, data: any): Promise<Respon
         },
         body: JSON.stringify(data)
     };
-    const response = await fetch(`${apiBasePath}${relativeUrl}/${id}`, requestOptions);
-    return response;
+    return await fetch(`${apiBasePath}${relativeUrl}/${id}`, requestOptions);
 }
 
 async function remove(relativeUrl: string, id: string): Promise<Response> {
     let requestOptions = {
         method: 'DELETE',
     };
-    const response = await fetch(`${apiBasePath}${relativeUrl}/${id}`, requestOptions);
-    return response;
+    return await fetch(`${apiBasePath}${relativeUrl}/${id}`, requestOptions);
 }
 
 interface IBooksListClient {
@@ -91,23 +88,18 @@ export const client: IBooksListClient = {
         };
     },
     addBook: async (book) => {
-        const response = await post<AddBookRequest>("/books", book)
-        return response;
+        return await post<AddBookRequest>("/books", book);
     },
     editBook: async (book, id) => {
-        const response = await put("/books", book, id)
-        return response;
+        return await put("/books", book, id);
     },
     removeBook: async (id) => {
-        const response = await remove("/books", id)
-        return response;
+        return await remove("/books", id);
     },
     changeActivation: async (id, data) => {
-        const response = await patch("/books", id, data)
-        return response;
+        return await patch("/books", id, data);
     },
     getBook: async (id: string) => {
-        const response = await get<BookDetails>(`/books/${id}`)
-        return response;
+        return await get<BookDetails>(`/books/${id}`);
     },
 };

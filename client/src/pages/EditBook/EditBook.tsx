@@ -8,8 +8,10 @@ import {categories} from "../../lib/data.ts";
 import ActionForm from "../../components/ActionForm.tsx";
 
 function EditBook() {
-    const [successMsgVisible, setSuccessMsgVisible] = useState(false);
-    const [errorMessageVisible, setErrorMessageVisible] = useState(false);
+    const [editedSuccessMsg, setEditedSuccessMsg] = useState(false);
+    const [editedErrorMsg, setEditedErrorMsg] = useState("");
+    const [bookError, setBookError] = useState("")
+
     const [book, setBook] = useState<BookDetails | null>(null);
 
     useEffect(() => {
@@ -19,9 +21,14 @@ function EditBook() {
 
     const fetchBook = async () => {
         const params = new URL(window.location.href).searchParams;
-        const id = params.get("id")
-        const data = await client.getBook(id!);
-        setBook(data)
+        const id = params.get("id");
+
+        try {
+            const result = await client.getBook(id || "");
+            setBook(result);
+        } catch (e: any) {
+            setBookError(e.message)
+        }
     }
 
 
@@ -43,21 +50,25 @@ function EditBook() {
             deactivated: book!.deactivated
         }
 
-        const response = await client.editBook(editedBook, book!.id);
-
-        if (response.ok) {
-            setSuccessMsgVisible(true);
-        } else {
-            setErrorMessageVisible(true);
+        try {
+            await client.editBook(editedBook, book!.id);
+            setEditedSuccessMsg(true);
+        } catch (e: any) {
+            setEditedErrorMsg(e.message);
         }
 
-        const timerId= setTimeout(() => {
+
+        const timerId = setTimeout(() => {
             redirect("/")
         }, 3000);
 
-        return ()=> {
+        return () => {
             clearTimeout(timerId)
         }
+    }
+
+    if (bookError) {
+        return <div>{bookError}</div>
     }
 
 
@@ -102,8 +113,9 @@ function EditBook() {
                     </fieldset>
 
                     <button className={"btn btn-primary btn-md mt-2"} type="submit">Done</button>
-                    {successMsgVisible && <Alert message={"Book has been added"} type={"success"}/>}
-                    {errorMessageVisible && <Alert message={"Something went wrong"} type={"error"}/>}
+                    {editedSuccessMsg && <Alert message={"Book has been added"} type={"success"}/>}
+                    {editedErrorMsg && <Alert message={editedErrorMsg} type={"error"}/>}
+                    {bookError && <Alert message={bookError} type={"error"}/>}
                 </div>
             </form>
         </ActionForm>
