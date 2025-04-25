@@ -44,6 +44,7 @@ function Dashboard() {
 
     const fetchBooks = async (filter?: string) => {
         try {
+            setError("")
             setBooksLoading(true)
             const {data, totalItems} = await client.getBooks(filter);
 
@@ -65,7 +66,7 @@ function Dashboard() {
                     <Actions setFilter={setFilter} totalItems={totalItems} showingCount={books.length}/>
                     <BookTable filter={filter} books={books}/>
                 </>
-                : <Alert message={"Something went wrong"} type={"error"}/>
+                : <Alert message={error} type={"error"}/>
             }
 
         </AppContex.Provider>

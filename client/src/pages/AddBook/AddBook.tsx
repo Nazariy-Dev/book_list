@@ -34,12 +34,12 @@ function AddBook() {
         }
 
         try {
-             await client.addBook(data);
+            setAddBookError("")
+            await client.addBook(data);
             setSuccessMsgVisible(true);
 
         } catch (e: any) {
             setAddBookError(e.message);
-
         }
 
         setTimeout(() => {

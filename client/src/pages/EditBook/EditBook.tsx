@@ -38,6 +38,8 @@ function EditBook() {
         if (!(e.target instanceof HTMLFormElement)) {
             throw new Error("Element is not form element");
         }
+
+        if (!book) return
         const formData = new FormData(e.target);
 
         let editedBook: AddBookRequest = {
@@ -45,13 +47,14 @@ function EditBook() {
             author: formData.get("author") as string,
             ISBN: Number(formData.get("ISBN")),
             category: formData.get("category") as string,
-            createdAt: book!.createdAt,
+            createdAt: book.createdAt,
             modifiedAt: moment().utc().format(),
-            deactivated: book!.deactivated
+            deactivated: book.deactivated
         }
 
         try {
-            await client.editBook(editedBook, book!.id);
+            setEditedErrorMsg("")
+            await client.editBook(editedBook, book.id);
             setEditedSuccessMsg(true);
         } catch (e: any) {
             setEditedErrorMsg(e.message);
